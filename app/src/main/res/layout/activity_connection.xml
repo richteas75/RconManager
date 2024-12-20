@@ -52,6 +52,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:drawableStart="@drawable/ic_history"
+                    android:drawableTint="?android:attr/textColorPrimary"
+                    android:onClick="onHistoryButtonClick"
                     android:text="@string/action_command_history" />
 
                 <Button
@@ -61,6 +63,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:drawableEnd="@drawable/ic_storage_list"
+                    android:drawableTint="?android:attr/textColorPrimary"
                     android:text="@string/action_quick_command" />
             </LinearLayout>
 
@@ -97,6 +100,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:drawableStart="@drawable/ic_left"
+                    android:drawableTint="?android:attr/textColorPrimary"
                     android:text="@string/action_prev" />
 
                 <Button
@@ -116,6 +120,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:drawableEnd="@drawable/ic_right"
+                    android:drawableTint="?android:attr/textColorPrimary"
                     android:text="@string/action_next" />
             </LinearLayout>
         </LinearLayout>
@@ -138,8 +143,9 @@
                     android:id="@+id/connection_command_area"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/terminalText"
-                    android:text="@string/command_result_area" />
+                    android:backgroundTint="?attr/colorControlNormal"
+                    android:text="@string/command_result_area"
+                    android:textColor="?android:attr/textColorPrimary" />
             </ScrollView>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

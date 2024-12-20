@@ -22,7 +22,8 @@
             android:contentDescription="@string/server_name_default_text"
             android:src="@drawable/ic_storage_list"
             android:layout_gravity="center"
-            android:layout_height="@dimen/item_server_icon" />
+            android:layout_height="@dimen/item_server_icon"
+            app:tint="?android:attr/textColorPrimary" />
     </LinearLayout>
 
     <LinearLayout
