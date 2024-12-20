@@ -3,8 +3,10 @@ package com.kenvix.rconmanager.ui.setting;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.preference.PreferenceFragmentCompat;
+//import android.support.v7.preference.PreferenceFragmentCompat;
 import android.util.Log;
+
+import androidx.preference.PreferenceFragmentCompat;
 
 import com.kenvix.rconmanager.DefaultPreferences;
 import com.kenvix.rconmanager.R;
@@ -19,7 +21,7 @@ public class SettingFragment extends PreferenceFragmentCompat {
         findPreference(DefaultPreferences.KeyTerminalTextSize)
                 .setOnPreferenceChangeListener((preference, o) -> !o.toString().equals("") && o.toString().matches("\\d*"));
 
-        findPreference("app_name").setOnPreferenceClickListener(preference -> openURL("market://details?id=" + Objects.requireNonNull(getContext()).getPackageName()));
+        findPreference("app_name").setOnPreferenceClickListener(preference -> openURL("market://details?id=" + requireContext().getPackageName()));
         findPreference("view_github").setOnPreferenceClickListener(preference -> openURL("https://github.com/kenvix/RconManager"));
         findPreference("author").setOnPreferenceClickListener(preference -> openURL("https://kenvix.com"));
     }

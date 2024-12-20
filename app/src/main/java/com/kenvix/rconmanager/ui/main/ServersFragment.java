@@ -1,10 +1,13 @@
 package com.kenvix.rconmanager.ui.main;
 
 import android.database.Cursor;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.RecyclerView;
+/*import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.RecyclerView;*/
 import android.view.View;
 
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kenvix.rconmanager.R;
 import com.kenvix.rconmanager.database.dao.ServerModel;
 import com.kenvix.rconmanager.rcon.meta.RconServer;

@@ -5,7 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.annotation.Nullable;
+//import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.kenvix.rconmanager.database.GlobalDatabaseHelper;
 import com.kenvix.utils.StringTools;

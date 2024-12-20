@@ -2,9 +2,13 @@ package com.kenvix.rconmanager.ui.setting;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v4.app.FragmentManager;
+/* import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.Toolbar;*/
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.kenvix.rconmanager.R;
 import com.kenvix.rconmanager.ui.base.BaseActivity;
@@ -13,7 +17,7 @@ import com.kenvix.utils.annotation.ViewAutoLoad;
 public class SettingActivity extends BaseActivity {
     public static final int ActivityRequestCode = 0xac01;
 
-    @ViewAutoLoad public  Toolbar         settingToolbar;
+    @ViewAutoLoad public Toolbar settingToolbar;
 
     @Override
     protected void onInitialize() {

@@ -14,7 +14,7 @@ import java.lang.ref.WeakReference;
 class RconServerConnectorAsyncTask extends BaseAsyncTask<Void, Void, RconConnect> {
     private ProgressDialog progressDialog;
 
-    private WeakReference<ConnectionActivity> activityWeakReference;
+    private final WeakReference<ConnectionActivity> activityWeakReference;
 
     RconServerConnectorAsyncTask(ConnectionActivity activity) {
         this.activityWeakReference = new WeakReference<>(activity);

@@ -1,6 +1,8 @@
 package com.kenvix.rconmanager;
 
-import android.support.v7.app.AppCompatActivity;
+/*import android.support.v7.app.AppCompatActivity;*/
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.kenvix.rconmanager.ui.base.view.IconManager;
 import com.kenvix.rconmanager.utils.Invoker;

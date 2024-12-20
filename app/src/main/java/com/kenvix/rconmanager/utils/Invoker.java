@@ -2,9 +2,11 @@ package com.kenvix.rconmanager.utils;
 
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.support.v7.app.AppCompatActivity;
+/*import android.support.v7.app.AppCompatActivity;*/
 import android.util.Log;
 import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.kenvix.rconmanager.R;
 import com.kenvix.utils.PreprocessorName;

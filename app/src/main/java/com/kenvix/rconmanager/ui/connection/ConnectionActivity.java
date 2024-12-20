@@ -10,9 +10,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
-import android.support.v4.app.NotificationCompat;
+/*import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.Toolbar;*/
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
@@ -26,6 +26,10 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
 
 import com.kenvix.rconmanager.ApplicationEnvironment;
 import com.kenvix.rconmanager.DefaultPreferences;
@@ -98,7 +102,7 @@ public class ConnectionActivity extends BaseActivity {
                 rconServer = new RconServer(name, host, port, password);
 
             }
-
+            connectionToolbar=findViewById(R.id.connection_toolbar);
             connectionToolbar.setTitle(rconServer.getName());
             setSupportActionBar(connectionToolbar);
 
@@ -256,7 +260,7 @@ public class ConnectionActivity extends BaseActivity {
         openActivityIntent.putExtra(ExtraPreFilledCommandResultAreaText, connectionCommandArea.getText().toString());
         openActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
 
-        PendingIntent openActivityPendingIntent = PendingIntent.getActivity(this, 0, openActivityIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent openActivityPendingIntent = PendingIntent.getActivity(this, 0, openActivityIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, ApplicationEnvironment.NotificationChannelID.RconConnection)
@@ -287,7 +291,8 @@ public class ConnectionActivity extends BaseActivity {
     public SpannableStringBuilder getCommandPrompt() {
         String commandPromptString = getPreferences().getString(DefaultPreferences.KeyCommandPrompt, DefaultPreferences.DefaultCommandPrompt);
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(commandPromptString);
-        ForegroundColorSpan colorPrimaryDark = new ForegroundColorSpan(getColor(R.color.colorPrimaryDark));
+        //ForegroundColorSpan colorPrimaryDark = new ForegroundColorSpan(getColor(R.color.colorPrimaryDark));
+        ForegroundColorSpan colorPrimaryDark = new ForegroundColorSpan(getColor(android.R.color.black));
 
         assert commandPromptString != null;
         spannableStringBuilder.setSpan(colorPrimaryDark, 0, commandPromptString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);

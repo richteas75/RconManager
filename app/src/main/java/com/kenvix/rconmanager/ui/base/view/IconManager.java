@@ -1,8 +1,11 @@
 package com.kenvix.rconmanager.ui.base.view;
 
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+/*import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;*/
 import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.HashMap;
 import java.util.Map;

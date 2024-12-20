@@ -5,9 +5,12 @@
 
 package com.kenvix.rconmanager.ui.base.view.base;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+/*import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;*/
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.kenvix.rconmanager.ui.base.BaseActivity;
 import com.kenvix.rconmanager.utils.Invoker;

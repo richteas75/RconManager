@@ -1,7 +1,9 @@
 package com.kenvix.rconmanager.ui.connection.view.commands;
 
-import android.support.annotation.NonNull;
+//import android.support.annotation.NonNull;
 import android.view.View;
+
+import androidx.annotation.NonNull;
 
 import com.kenvix.rconmanager.ui.base.view.base.BaseHolder;
 

@@ -7,7 +7,7 @@ package com.kenvix.rconmanager.ui.main;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
+/*import android.database.Cursor;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -17,13 +17,18 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.Toolbar;*/
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.google.android.material.navigation.NavigationView;
 import com.kenvix.rconmanager.ApplicationEnvironment;
-import com.kenvix.rconmanager.BuildConfig;
 import com.kenvix.rconmanager.R;
 import com.kenvix.rconmanager.database.dao.ServerModel;
 import com.kenvix.rconmanager.rcon.meta.RconServer;
@@ -58,7 +63,7 @@ public class MainActivity extends BaseActivity {
         ApplicationEnvironment.initializeApplication(this);
 
         setSupportActionBar(mainToolbar);
-
+        mainDrawerLayout=findViewById(R.id.main_drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mainDrawerLayout, mainToolbar, R.string.action_open, R.string.action_close);
         mainDrawerLayout.addDrawerListener(toggle);
@@ -66,7 +71,7 @@ public class MainActivity extends BaseActivity {
 
         quickCommandsFragment = new QuickCommandsFragment();
         serversFragment = new ServersFragment();
-
+        mainNavView = findViewById(R.id.main_nav_view);
         mainNavView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
 
         setForegroundFragment(R.id.main_fragment_container, serversFragment);

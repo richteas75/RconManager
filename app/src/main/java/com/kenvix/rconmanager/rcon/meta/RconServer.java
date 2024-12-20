@@ -7,7 +7,9 @@ package com.kenvix.rconmanager.rcon.meta;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
+/*import android.support.annotation.NonNull;*/
+
+import androidx.annotation.NonNull;
 
 import com.kenvix.rconmanager.ApplicationEnvironment;
 import com.kenvix.utils.StringTools;
