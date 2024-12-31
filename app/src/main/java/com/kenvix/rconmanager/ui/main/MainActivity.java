@@ -5,7 +5,9 @@
 
 package com.kenvix.rconmanager.ui.main;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 /*import android.database.Cursor;
 import android.os.Build;
