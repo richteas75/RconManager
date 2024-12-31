@@ -53,6 +53,7 @@ public class ConnectionActivity extends BaseActivity {
     public static final String ExtraRconServer = "rcon_server";
     public static final String ExtraPreFilledCommandText = "rcon_prefill_command";
     public static final String ExtraPreFilledCommandResultAreaText = "rcon_prefill_result_area";
+    public static final String ExtraCommandHistory = "rcon_command_history";
 
     private RconServer rconServer;
     private RconConnect rconConnect = null;
@@ -76,10 +77,20 @@ public class ConnectionActivity extends BaseActivity {
     @ViewAutoLoad public LinearLayout connectionCommandLayout;
 
     @Override
-    protected void onInitialize() {
+    protected void onInitialize(Bundle savedInstanceState) {
         try {
 
-            Intent intent = getIntent();
+            String preFilledCommandText;
+            String preFilledCommandResultAreaText;
+            // If we have a saved state then we can restore it now
+            if (savedInstanceState != null) {
+                rconServer = savedInstanceState.getParcelable(ExtraRconServer);
+                preFilledCommandText = savedInstanceState.getString(ExtraPreFilledCommandText);
+                preFilledCommandResultAreaText =savedInstanceState.getString(ExtraPreFilledCommandResultAreaText);
+                commandHistory=savedInstanceState.getStringArrayList(ExtraCommandHistory);
+            } else {
+
+                Intent intent = getIntent();
 
 
             rconServer = intent.getParcelableExtra(ExtraRconServer);
@@ -104,16 +115,17 @@ public class ConnectionActivity extends BaseActivity {
 
                 rconServer = new RconServer(name, host, port, password);
 
+                }
+                preFilledCommandText = intent.getStringExtra(ExtraPreFilledCommandText);
+                preFilledCommandResultAreaText = intent.getStringExtra(ExtraPreFilledCommandResultAreaText);
             }
             connectionToolbar=findViewById(R.id.connection_toolbar);
             connectionToolbar.setTitle(rconServer.getName());
             setSupportActionBar(connectionToolbar);
 
-            String preFilledCommandText = intent.getStringExtra(ExtraPreFilledCommandText);
             if(preFilledCommandText != null)
                 connectionCommandText.setText(preFilledCommandText);
 
-            String preFilledCommandResultAreaText = intent.getStringExtra(ExtraPreFilledCommandResultAreaText);
             if(preFilledCommandResultAreaText != null) {
                 connectionCommandArea.setText(preFilledCommandResultAreaText);
                 scrollCommandAreaToBottom();
@@ -124,7 +136,7 @@ public class ConnectionActivity extends BaseActivity {
             connectionCommandNext.setOnClickListener(this::onNextCommandButtonClick);
             connectionQuickCommand.setOnClickListener(this::onQuickCommandButtonClick);
 
-            connectionCommandArea.setText("");
+            //connectionCommandArea.setText("");
             connectionCommandArea.setTextSize(Integer.parseInt(Objects.requireNonNull(getPreferences().getString(DefaultPreferences.KeyTerminalTextSize, DefaultPreferences.DefaultTerminalTextSize))));
             connectionCommandText.setImeActionLabel(getString(R.string.action_run), KeyEvent.KEYCODE_ENTER);
             connectionCommandText.setOnKeyListener((view, keyCode, event) -> {
@@ -232,6 +244,16 @@ public class ConnectionActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putParcelable(ExtraRconServer, rconServer);
+        outState.putString(ExtraPreFilledCommandText, connectionCommandText.getText().toString());
+        outState.putString(ExtraPreFilledCommandResultAreaText, connectionCommandArea.getText().toString());
+        outState.putStringArrayList(ExtraCommandHistory, commandHistory);
     }
 
     @Override

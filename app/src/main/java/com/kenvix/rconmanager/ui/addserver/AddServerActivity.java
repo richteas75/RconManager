@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.Cursor;
 //import android.support.v7.widget.Toolbar;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -57,7 +58,7 @@ public class AddServerActivity extends BaseActivity {
 
     @Override
     @SuppressWarnings("SetTextI18n")
-    protected void onInitialize() {
+    protected void onInitialize(Bundle savedInstanceState) {
         editTargetId = getIntent().getIntExtra(ParamEditTargetId, -1);
 
         setSupportActionBar(addServerToolbar);

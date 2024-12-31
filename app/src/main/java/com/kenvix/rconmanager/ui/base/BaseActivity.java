@@ -41,7 +41,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         fragmentManager = getSupportFragmentManager();
         Invoker.invokeViewAutoLoader(this);
 
-        onInitialize();
+        onInitialize(savedInstanceState);
     }
 
     public void toast(String text, int toastLength) {
@@ -147,7 +147,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         return true;
     }
 
-    protected abstract void onInitialize();
+    protected abstract void onInitialize(Bundle bundle);
     protected abstract int getBaseLayout();
     protected abstract int getBaseContainer();
 
