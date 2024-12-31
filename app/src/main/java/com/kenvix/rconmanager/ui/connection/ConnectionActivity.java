@@ -15,6 +15,7 @@ import android.os.Build;
 /*import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;*/
+import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
@@ -30,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NotificationCompat;
@@ -59,7 +61,7 @@ public class ConnectionActivity extends BaseActivity {
     private RconConnect rconConnect = null;
     private int historyPosition = 0;
     private boolean allowRunCommand = false;
-    private List<String> commandHistory = new ArrayList<>();
+    private ArrayList<String> commandHistory = new ArrayList<>();
     private List<QuickCommand> quickCommands = null;
     private String[] quickCommandNames = null;
 
@@ -93,27 +95,27 @@ public class ConnectionActivity extends BaseActivity {
                 Intent intent = getIntent();
 
 
-            rconServer = intent.getParcelableExtra(ExtraRconServer);
+                rconServer = intent.getParcelableExtra(ExtraRconServer);
 
-            if(rconServer == null) {
-                Uri uriCall = intent.getData();
+                if (rconServer == null) {
+                    Uri uriCall = intent.getData();
 
-                if (uriCall == null)
-                    throw new IllegalArgumentException("Either ExtraRconServer or URI CAN'T be null");
+                    if (uriCall == null)
+                        throw new IllegalArgumentException("Either ExtraRconServer or URI CAN'T be null");
 
-                String host = uriCall.getHost();
-                int port = uriCall.getPort();
+                    String host = uriCall.getHost();
+                    int port = uriCall.getPort();
 
-                if(host == null || host.isEmpty() || port < 1 || port > 65535)
-                    throw new IllegalArgumentException("Illegal host or port");
+                    if (host == null || host.isEmpty() || port < 1 || port > 65535)
+                        throw new IllegalArgumentException("Illegal host or port");
 
-                String password = (uriCall.getAuthority() == null || uriCall.getAuthority().isEmpty()) ? "" : uriCall.getAuthority();
-                String name = uriCall.getQueryParameter(ApplicationEnvironment.getRconURINameParamKey());
+                    String password = (uriCall.getAuthority() == null || uriCall.getAuthority().isEmpty()) ? "" : uriCall.getAuthority();
+                    String name = uriCall.getQueryParameter(ApplicationEnvironment.getRconURINameParamKey());
 
-                if(name == null || name.isEmpty())
-                    name = getString(R.string.title_unnamed);
+                    if (name == null || name.isEmpty())
+                        name = getString(R.string.title_unnamed);
 
-                rconServer = new RconServer(name, host, port, password);
+                    rconServer = new RconServer(name, host, port, password);
 
                 }
                 preFilledCommandText = intent.getStringExtra(ExtraPreFilledCommandText);
@@ -147,7 +149,8 @@ public class ConnectionActivity extends BaseActivity {
                 return false;
             });
 
-            connectionScroll.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> scrollCommandAreaToBottom());
+            // this makes the connectionCommandArea lose focus, etc. when showing keyboard in portrait mode
+            //connectionScroll.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> scrollCommandAreaToBottom());
 
             RconServerConnectorAsyncTask rconServerConnectorAsyncTask = new RconServerConnectorAsyncTask(this);
             rconServerConnectorAsyncTask.execute();
