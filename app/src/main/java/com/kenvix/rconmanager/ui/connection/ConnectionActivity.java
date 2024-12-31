@@ -8,6 +8,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.net.Uri;
 import android.os.Build;
 /*import android.support.v4.app.NotificationCompat;
@@ -17,6 +19,7 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -292,7 +295,16 @@ public class ConnectionActivity extends BaseActivity {
         String commandPromptString = getPreferences().getString(DefaultPreferences.KeyCommandPrompt, DefaultPreferences.DefaultCommandPrompt);
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(commandPromptString);
         //ForegroundColorSpan colorPrimaryDark = new ForegroundColorSpan(getColor(R.color.colorPrimaryDark));
-        ForegroundColorSpan colorPrimaryDark = new ForegroundColorSpan(getColor(android.R.color.black));
+        // Get the primary text color of the theme
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = this.getTheme();
+        theme.resolveAttribute(android.R.attr.textColorPrimary, typedValue, true);
+        TypedArray arr =
+                this.obtainStyledAttributes(typedValue.data, new int[]{
+                        android.R.attr.textColorPrimary});
+        int primaryColor = arr.getColor(0, -1);
+        ForegroundColorSpan colorPrimaryDark = new ForegroundColorSpan(primaryColor);
+        arr.recycle();
 
         assert commandPromptString != null;
         spannableStringBuilder.setSpan(colorPrimaryDark, 0, commandPromptString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
