@@ -92,4 +92,7 @@
     <string name="result_prompt">"> "</string>
     <string name="error_invalid_email">Email-Adresse ungültig</string>
     <string name="permission_rationale">Zugriff auf Adressbuch erforderlich um EMails-Adressen         zu vervollständigen.</string>
+    <string name="permissionNotificationDialogMessage">Bitte Benachrichtigungen aktivierem</string>
+    <string name="btnText_NoThanks">Nein danke</string>
+    <string name="app_may_not_work_as_intended">App könnte nicht wie gedacht funktionieren</string>
 </resources>

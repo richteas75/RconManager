@@ -18,14 +18,22 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;*/
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
@@ -59,6 +67,8 @@ public class MainActivity extends BaseActivity {
     @ViewAutoLoad
     public DrawerLayout mainDrawerLayout;
 
+    private static final String TAG =MainActivity.class.getName();
+
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
         ApplicationEnvironment.initializeApplication(this);
@@ -74,8 +84,60 @@ public class MainActivity extends BaseActivity {
         serversFragment = new ServersFragment();
         mainNavView = findViewById(R.id.main_nav_view);
         mainNavView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
+        askNotificationPermission();
 
         setForegroundFragment(R.id.main_fragment_container, serversFragment);
+    }
+
+    // Declare the launcher at the top of your Activity/Fragment:
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    // FCM SDK (and your app) can post notifications.
+                    Log.d(TAG, "***** notifications enabled *****");
+                } else {
+                    // TODO: Inform user that that your app will not show notifications.
+                    Toast.makeText(this,
+                            R.string.app_may_not_work_as_intended, Toast.LENGTH_LONG).show();
+                }
+            });
+
+    private void askNotificationPermission() {
+        // This is only necessary for API level >= 33 (TIRAMISU)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+                    PackageManager.PERMISSION_GRANTED) {
+                // FCM SDK (and your app) can post notifications.
+            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+                // TODO: display an educational UI explaining to the user the features that will be enabled
+                //       by them granting the POST_NOTIFICATION permission. This UI should provide the user
+                //       "OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.
+                //       If the user selects "No thanks," allow the user to continue without notifications.
+                new AlertDialog.Builder(this)
+                        .setTitle("Info")
+                        .setMessage(getString(R.string.permissionNotificationDialogMessage) )
+
+                        // Specifying a listener allows you to take an action before dismissing the dialog.
+                        // The dialog is automatically dismissed when a dialog button is clicked.
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Continue
+                                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+                            }
+                        })
+                        .setNegativeButton(R.string.btnText_NoThanks, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_info)
+                        .show();
+            } else {
+                // Directly ask for the permission
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+            }
+        }
     }
 
 

@@ -93,4 +93,7 @@
     <string name="result_prompt">"> "</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email         completions.     "</string>
+    <string name="permissionNotificationDialogMessage">Please allow notifications</string>
+    <string name="btnText_NoThanks">No thanks</string>
+    <string name="app_may_not_work_as_intended">App may not work as intended</string>
 </resources>

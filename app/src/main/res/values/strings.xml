@@ -95,4 +95,7 @@
     <string name="title_author">作者：Kenvix</string>
     <string name="summary_author_blog">查看作者博客 (kenvix.com)</string>
     <string name="result_prompt">"λ > "</string>
+    <string name="permissionNotificationDialogMessage">Please allow notifications</string>
+    <string name="btnText_NoThanks">No thanks</string>
+    <string name="app_may_not_work_as_intended">App may not work as intended</string>
 </resources>
