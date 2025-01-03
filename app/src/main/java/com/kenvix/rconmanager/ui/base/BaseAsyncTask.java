@@ -1,8 +1,9 @@
 package com.kenvix.rconmanager.ui.base;
 
-import android.os.AsyncTask;
+//import android.os.AsyncTask;
 
-public abstract class BaseAsyncTask<T, U, X> extends AsyncTask<T, U, X> {
+//public abstract class BaseAsyncTask<T, U, X> extends AsyncTask<T, U, X> {
+public abstract class BaseAsyncTask<T, U, X> extends AsyncTaskExecutor<T, U, X> {
     private RuntimeException exception = null;
 
     public RuntimeException getException() {

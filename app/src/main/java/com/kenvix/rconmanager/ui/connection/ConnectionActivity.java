@@ -153,7 +153,8 @@ public class ConnectionActivity extends BaseActivity {
             //connectionScroll.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> scrollCommandAreaToBottom());
 
             RconServerConnectorAsyncTask rconServerConnectorAsyncTask = new RconServerConnectorAsyncTask(this);
-            rconServerConnectorAsyncTask.execute();
+            //rconServerConnectorAsyncTask.execute();
+            rconServerConnectorAsyncTask.executeAsync();
 
         } catch (Exception ex) {
             exceptionToastPrompt(ex);
@@ -353,7 +354,8 @@ public class ConnectionActivity extends BaseActivity {
                 RconCommanderAsyncTask rconCommanderAsyncTask = new RconCommanderAsyncTask(rconConnect, this);
                 appendCommandEcho(commandText);
                 pushCommandHistory(commandText);
-                rconCommanderAsyncTask.execute(commandText);
+                //rconCommanderAsyncTask.execute(commandText);
+                rconCommanderAsyncTask.executeAsync(commandText);
             }
         }
     }

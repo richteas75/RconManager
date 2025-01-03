@@ -9,20 +9,22 @@ import com.kenvix.rconmanager.rcon.exception.IllegalAuthorizationException;
 import com.kenvix.rconmanager.rcon.protocol.RconConnect;
 import com.kenvix.rconmanager.ui.base.BaseAsyncTask;
 
-import java.lang.ref.WeakReference;
-
 class RconServerConnectorAsyncTask extends BaseAsyncTask<Void, Void, RconConnect> {
     private ProgressDialog progressDialog;
 
-    private final WeakReference<ConnectionActivity> activityWeakReference;
+    //private final WeakReference<ConnectionActivity> activityWeakReference;
+    private final ConnectionActivity connectionActivity;
 
     RconServerConnectorAsyncTask(ConnectionActivity activity) {
-        this.activityWeakReference = new WeakReference<>(activity);
+        //this.activityWeakReference = new WeakReference<>(activity);
+        this.connectionActivity = activity;
     }
 
     @Override
-    protected RconConnect doInBackground(Void... voids) {
-        RconConnect connect = new RconConnect(activityWeakReference.get().getRconServer());
+    //public RconConnect doInBackground(Void... voids) {
+    public RconConnect doInBackground(Void... voids) {
+        //RconConnect connect = new RconConnect(activityWeakReference.get().getRconServer());
+        RconConnect connect = new RconConnect(connectionActivity.getRconServer());
 
         try {
             connect.connect();
@@ -36,7 +38,8 @@ class RconServerConnectorAsyncTask extends BaseAsyncTask<Void, Void, RconConnect
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        ConnectionActivity activity = activityWeakReference.get();
+        //ConnectionActivity activity = activityWeakReference.get();
+        ConnectionActivity activity = connectionActivity;
 
         progressDialog = new ProgressDialog(activity);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -51,7 +54,8 @@ class RconServerConnectorAsyncTask extends BaseAsyncTask<Void, Void, RconConnect
     @Override
     protected void onPostExecute(RconConnect rconConnect) {
         super.onPostExecute(rconConnect);
-        ConnectionActivity activity = activityWeakReference.get();
+        //ConnectionActivity activity =  activityWeakReference.get();
+        ConnectionActivity activity = connectionActivity;
 
         if(progressDialog.isShowing())
             progressDialog.dismiss();
@@ -82,7 +86,8 @@ class RconServerConnectorAsyncTask extends BaseAsyncTask<Void, Void, RconConnect
     }
 
     private void exitForError() {
-        ConnectionActivity activity = activityWeakReference.get();
+        //ConnectionActivity activity = activityWeakReference.get();
+        ConnectionActivity activity = connectionActivity;
 
         activity.setResult(Activity.RESULT_CANCELED);
         activity.finish();
