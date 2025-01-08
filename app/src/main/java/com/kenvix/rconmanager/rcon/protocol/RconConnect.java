@@ -208,6 +208,12 @@ public class RconConnect {
             if(payload == null || payload.trim().isEmpty()) {
                 throw new IllegalArgumentException("Payload can't be null or empty");
             }
+            else if (payload.equals("keep-alive")) { // dummy command, used as keep-alive
+                RconPacket response = send(RconPacket.PacketExecCommand, "".getBytes());
+                // discard message by command:
+                RconCommandResult result = new RconCommandResult("", "empty");
+                return result;
+            }
 
             setStatus(Status.Working);
             RconPacket response = send(RconPacket.PacketExecCommand, payload.getBytes());

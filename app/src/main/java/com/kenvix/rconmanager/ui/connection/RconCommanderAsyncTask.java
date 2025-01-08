@@ -38,7 +38,7 @@ class RconCommanderAsyncTask extends BaseAsyncTask<String, Void, RconCommandResu
     protected void onPostExecute(RconCommandResult rconCommandResult) {
         super.onPostExecute(rconCommandResult);
         if(getException() == null) {
-            if(rconCommandResult != null) {
+            if((rconCommandResult != null) && (! rconCommandResult.getResult().equals("empty"))) {
                 //activityWeakReference.get().appendCommandResult(rconCommandResult.getResult());
                 connectionActivity.appendCommandResult(rconCommandResult.getResult());
             }

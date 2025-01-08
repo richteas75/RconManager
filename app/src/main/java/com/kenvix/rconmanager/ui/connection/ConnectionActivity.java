@@ -16,6 +16,7 @@ import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;*/
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
@@ -66,6 +67,8 @@ public class ConnectionActivity extends BaseActivity {
     private String[] quickCommandNames = null;
 
     private boolean errorRaised = false;
+
+    private Handler handler;
 
     @ViewAutoLoad public Button connectionCommandPrev;
     @ViewAutoLoad public Button connectionCommandNext;
@@ -155,6 +158,8 @@ public class ConnectionActivity extends BaseActivity {
             RconServerConnectorAsyncTask rconServerConnectorAsyncTask = new RconServerConnectorAsyncTask(this);
             //rconServerConnectorAsyncTask.execute();
             rconServerConnectorAsyncTask.executeAsync();
+            // Create the Handler object for running repeating task (on the main thread by default)
+            handler = new Handler();
 
         } catch (Exception ex) {
             exceptionToastPrompt(ex);
@@ -174,7 +179,28 @@ public class ConnectionActivity extends BaseActivity {
         rconConnect = connect;
         setAllowRunCommand(true);
         connectionCommandArea.setTextIsSelectable(true);
+        // Start the initial keepAlive runnable task by posting through the handler
+        handler.post(keepAliveRunnable);
     }
+
+
+    // to keep connection alive, run a dummy command less than 45 seconds after last command
+    // define the code block to be executed
+    private final Runnable keepAliveRunnable = new Runnable() {
+        @Override
+        public void run() {
+            // Execute keep alive dummy command
+            RconCommanderAsyncTask rconCommanderAsyncTask = new RconCommanderAsyncTask(rconConnect, connectionActivity);
+            String [] array = new String[1];
+            array[0]="keep-alive"; //dummy command
+            rconCommanderAsyncTask.executeAsync(array);
+            //Log.d("Handlers", "Called on main thread");
+            // Repeat this the same runnable code block again another 2 seconds
+            // 'this' is referencing the Runnable object
+            handler.postDelayed(this, 42000);
+        }
+    };
+
 
     @Override
     protected void onPause() {
@@ -248,6 +274,7 @@ public class ConnectionActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        handler.removeCallbacks(keepAliveRunnable);
     }
 
     @Override
