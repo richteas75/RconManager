@@ -158,6 +158,8 @@ public class ConnectionActivity extends BaseActivity {
             RconServerConnectorAsyncTask rconServerConnectorAsyncTask = new RconServerConnectorAsyncTask(this);
             //rconServerConnectorAsyncTask.execute();
             rconServerConnectorAsyncTask.executeAsync();
+
+
             // Create the Handler object for running repeating task (on the main thread by default)
             handler = new Handler();
 
@@ -215,8 +217,13 @@ public class ConnectionActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        RconServerConnectorAsyncTask rconServerConnectorAsyncTask = new RconServerConnectorAsyncTask(this);
+        //rconServerConnectorAsyncTask.execute();
+        rconServerConnectorAsyncTask.executeAsync();
 
         if(rconConnect != null && !errorRaised) {
+        //if(rconConnect != null && !errorRaised) {
+        if(rconServer != null && !errorRaised) {
             int notifyCode = rconServer.hashCode();
             Log.d("Rcon Connection", "Frontend started, hashcode: " + notifyCode);
             cleanConnectionNotification(notifyCode);
