@@ -155,9 +155,6 @@ public class ConnectionActivity extends BaseActivity {
             // this makes the connectionCommandArea lose focus, etc. when showing keyboard in portrait mode
             //connectionScroll.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> scrollCommandAreaToBottom());
 
-            RconServerConnectorAsyncTask rconServerConnectorAsyncTask = new RconServerConnectorAsyncTask(this);
-            //rconServerConnectorAsyncTask.execute();
-            rconServerConnectorAsyncTask.executeAsync();
 
 
             // Create the Handler object for running repeating task (on the main thread by default)
@@ -221,7 +218,6 @@ public class ConnectionActivity extends BaseActivity {
         //rconServerConnectorAsyncTask.execute();
         rconServerConnectorAsyncTask.executeAsync();
 
-        if(rconConnect != null && !errorRaised) {
         //if(rconConnect != null && !errorRaised) {
         if(rconServer != null && !errorRaised) {
             int notifyCode = rconServer.hashCode();
