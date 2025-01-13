@@ -250,7 +250,7 @@ public class ConnectionActivity extends BaseActivity {
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.connection_command_area:
+            case R.id.connection_clean_command_area:
                 connectionCommandArea.setText("");
                 return true;
 
