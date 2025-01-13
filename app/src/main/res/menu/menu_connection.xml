@@ -9,9 +9,9 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/connection_clean_command_area"
+        android:id="@+id/connection_clean_command_result_area"
         android:orderInCategory="100"
-        android:title="@string/action_clean_command_area"
+        android:title="@string/action_clean_command_result_area"
         app:showAsAction="never" />
 
     <item

@@ -48,14 +48,14 @@
     <string name="action_prev">上一个</string>
     <string name="action_next">下一个</string>
     <string name="action_connection_info">连接信息</string>
-    <string name="action_clean_command_area">清空命令结果</string>
+    <string name="action_clean_command_result_area">清空命令结果</string>
     <string name="action_exit">退出</string>
     <string name="action_clean_history">清空命令历史</string>
     <string name="action_back">返回</string>
     <string name="prompt_connectied_to">已连接</string>
     <string name="prompt_connecting">正在连接到 %s\n%s</string>
     <string name="prompt_connection_failed">连接 %s 失败\n\n%s</string>
-    <string name="command_result_area">COMMAND RESULT AREA</string>
+    <string name="command_result_area">COMMAND RESULT AREA\n\n</string>
     <string name="title_activity_setting">设置</string>
     <string name="title_about">关于</string>
     <string name="title_terminal">终端</string>

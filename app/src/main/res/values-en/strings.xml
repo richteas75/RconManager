@@ -45,7 +45,7 @@
     <string name="action_prev">Prev</string>
     <string name="action_next">Next</string>
     <string name="action_connection_info">Connection info</string>
-    <string name="action_clean_command_area">Clean command result</string>
+    <string name="action_clean_command_result_area">Clean command result</string>
     <string name="action_exit">Exit</string>
     <string name="action_clean_history">Clean command history</string>
     <string name="action_back">Back</string>
@@ -59,7 +59,7 @@
     <string name="desc_auto_start">When rcon:// links are clicked, automatically connect and show terminal.</string>
     <string name="desc_command_prompt">Displayed at terminal</string>
     <string name="title_connection">RCON connection</string>
-    <string name="command_result_area">COMMAND RESULT AREA</string>
+    <string name="command_result_area">COMMAND RESULT AREA\n\n</string>
     <string name="title_terminal_text_size">Terminal text size</string>
     <string name="title_activity_setting">Settings</string>
     <string name="title_unnamed">Unnamed</string>

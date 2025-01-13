@@ -63,6 +63,7 @@ public class ConnectionActivity extends BaseActivity {
     private int historyPosition = 0;
     private boolean allowRunCommand = false;
     private ArrayList<String> commandHistory = new ArrayList<>();
+    private String preFilledCommandResultAreaText;
     private List<QuickCommand> quickCommands = null;
     private String[] quickCommandNames = null;
 
@@ -85,6 +86,7 @@ public class ConnectionActivity extends BaseActivity {
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
         try {
+            preFilledCommandResultAreaText=getString(R.string.command_result_area);
 
             String preFilledCommandText;
             String preFilledCommandResultAreaText;
@@ -252,6 +254,9 @@ public class ConnectionActivity extends BaseActivity {
         switch (id) {
             case R.id.connection_clean_command_area:
                 connectionCommandArea.setText("");
+            case R.id.connection_clean_command_result_area:
+                preFilledCommandResultAreaText=getString(R.string.command_result_area);
+                connectionCommandArea.setText(preFilledCommandResultAreaText);
                 return true;
 
             case R.id.connection_exit:
