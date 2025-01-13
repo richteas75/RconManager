@@ -69,6 +69,7 @@ public class ConnectionActivity extends BaseActivity {
     private boolean errorRaised = false;
 
     private Handler handler;
+    private static final String TAG =ConnectionActivity.class.getName();
 
     @ViewAutoLoad public Button connectionCommandPrev;
     @ViewAutoLoad public Button connectionCommandNext;
@@ -120,6 +121,8 @@ public class ConnectionActivity extends BaseActivity {
 
                     rconServer = new RconServer(name, host, port, password);
 
+                } else{
+                    Log.d(TAG,"rescued activity from intent");
                 }
                 preFilledCommandText = intent.getStringExtra(ExtraPreFilledCommandText);
                 preFilledCommandResultAreaText = intent.getStringExtra(ExtraPreFilledCommandResultAreaText);
@@ -134,7 +137,7 @@ public class ConnectionActivity extends BaseActivity {
             if(preFilledCommandResultAreaText != null) {
                 connectionCommandArea.setText(preFilledCommandResultAreaText);
                 scrollCommandAreaToBottom();
-                Log.d("Connection Activity","rescued activity from intent");
+                Log.d(TAG,"rescued activity from intent");
             }
 
             connectionCommandPrev.setOnClickListener(this::onPreviousCommandButtonClick);
@@ -386,6 +389,7 @@ public class ConnectionActivity extends BaseActivity {
                 pushCommandHistory(commandText);
                 //rconCommanderAsyncTask.execute(commandText);
                 rconCommanderAsyncTask.executeAsync(commandText);
+                //Log.d(TAG, "runCommand: " + res);
             }
         }
     }
@@ -458,12 +462,14 @@ public class ConnectionActivity extends BaseActivity {
         }
 
         setResult(RESULT_OK);
+        Log.d("Rcon Connection", "Finishing");
         finish();
     }
 
     public static void startActivity(Activity activity, RconServer rconServer) {
         Intent intent = new Intent(activity, ConnectionActivity.class);
         intent.putExtra(ConnectionActivity.ExtraRconServer, rconServer);
+        Log.d("Connection Activity","starting activity using intent");
         activity.startActivity(intent);
     }
 
