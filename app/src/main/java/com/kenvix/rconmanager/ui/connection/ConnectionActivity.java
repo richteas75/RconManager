@@ -73,6 +73,8 @@ public class ConnectionActivity extends BaseActivity {
     private boolean errorRaised = false;
 
     private Handler handler;
+    private ConnectionActivity connectionActivity;
+
     private static final String TAG =ConnectionActivity.class.getName();
 
     @ViewAutoLoad public Button connectionCommandPrev;
@@ -164,6 +166,7 @@ public class ConnectionActivity extends BaseActivity {
             //connectionScroll.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> scrollCommandAreaToBottom());
 
 
+            connectionActivity = this;
 
             // Create the Handler object for running repeating task (on the main thread by default)
             handler = new Handler();
@@ -202,7 +205,7 @@ public class ConnectionActivity extends BaseActivity {
             array[0]="keep-alive"; //dummy command
             rconCommanderAsyncTask.executeAsync(array);
             //Log.d("Handlers", "Called on main thread");
-            // Repeat this the same runnable code block again another 2 seconds
+            // Repeat  the same runnable code block again after another 42 seconds
             // 'this' is referencing the Runnable object
             handler.postDelayed(this, 42000);
         }
