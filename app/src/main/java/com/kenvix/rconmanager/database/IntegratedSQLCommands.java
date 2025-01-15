@@ -19,4 +19,13 @@ final class IntegratedSQLCommands {
                 ");";
     }
 
+    static String getCreateConnectionTableSQL() {
+        return "CREATE TABLE IF NOT EXISTS \"main\".\"connections\" (\n" +
+                "  \"sid\" INTEGER NOT NULL ON CONFLICT FAIL PRIMARY KEY,\n" +
+                "  \"prefilledcommand\" TEXT NOT NULL ON CONFLICT FAIL,\n" +
+                "  \"result\" TEXT NOT NULL ON CONFLICT FAIL,\n" +
+                "  \"history\" TEXT NOT NULL ON CONFLICT FAIL\n" +
+                ");";
+    }
+
 }

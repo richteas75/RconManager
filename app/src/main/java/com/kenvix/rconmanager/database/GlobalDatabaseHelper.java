@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 import android.util.Log;
 
 public final class GlobalDatabaseHelper extends SQLiteOpenHelper {
-    static final int DatabaseVersion = 2;
+    static final int DatabaseVersion = 3;
     static final String DatabaseFileName = "database.sqlite3";
     public Context context;
 
@@ -41,6 +41,7 @@ public final class GlobalDatabaseHelper extends SQLiteOpenHelper {
         try {
             db.execSQL(IntegratedSQLCommands.getCreateServerListTableSQL());
             db.execSQL(IntegratedSQLCommands.getCreateQuickCommandsTableSQL());
+            db.execSQL(IntegratedSQLCommands.getCreateConnectionTableSQL());
 
             db.setTransactionSuccessful();
         } catch (Exception ex) {
@@ -53,6 +54,21 @@ public final class GlobalDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        db.beginTransaction();
+        try {
+            switch(oldVersion) {
+                // incremental upgrades, therefore missing break statements
+                case 1: //upgrade logic from version 1 to 2
+                case 2: //upgrade logic from version 2 to 3
+                    db.execSQL(IntegratedSQLCommands.getCreateConnectionTableSQL());
+                    db.setTransactionSuccessful();
+                    break;
+            }
+        } catch (Exception ex) {
+            Log.e("Global Database Helper", "Adding critical table failed. Operation canceled ...");
+            throw ex;
+        } finally {
+            db.endTransaction();
+        }
     }
 }

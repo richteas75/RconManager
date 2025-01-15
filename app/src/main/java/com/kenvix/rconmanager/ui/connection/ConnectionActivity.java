@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 /*import android.support.v4.app.NotificationCompat;
@@ -39,10 +40,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.TaskStackBuilder;
 
 import com.kenvix.rconmanager.ApplicationEnvironment;
 import com.kenvix.rconmanager.DefaultPreferences;
 import com.kenvix.rconmanager.R;
+import com.kenvix.rconmanager.database.dao.ConnectionsModel;
 import com.kenvix.rconmanager.database.dao.QuickCommandModel;
 import com.kenvix.rconmanager.meta.QuickCommand;
 import com.kenvix.rconmanager.rcon.meta.RconServer;
@@ -66,6 +69,7 @@ public class ConnectionActivity extends BaseActivity {
     private int historyPosition = 0;
     private boolean allowRunCommand = false;
     private ArrayList<String> commandHistory = new ArrayList<>();
+    private String preFilledCommandText="";
     private String preFilledCommandResultAreaText;
     private List<QuickCommand> quickCommands = null;
     private String[] quickCommandNames = null;
@@ -93,16 +97,18 @@ public class ConnectionActivity extends BaseActivity {
     @Override
     protected void onInitialize(Bundle savedInstanceState) {
         try {
+            commandHistory = new ArrayList<>();
+            quickCommands = getQuickCommands();
+            connectionsModel = new ConnectionsModel(this);
             preFilledCommandResultAreaText=getString(R.string.command_result_area);
 
-            String preFilledCommandText;
-            String preFilledCommandResultAreaText;
             // If we have a saved state then we can restore it now
             if (savedInstanceState != null) {
                 rconServer = savedInstanceState.getParcelable(ExtraRconServer);
                 preFilledCommandText = savedInstanceState.getString(ExtraPreFilledCommandText);
                 preFilledCommandResultAreaText =savedInstanceState.getString(ExtraPreFilledCommandResultAreaText);
-                commandHistory=savedInstanceState.getStringArrayList(ExtraCommandHistory);
+                if (savedInstanceState.containsKey(ExtraCommandHistory))
+                    commandHistory=savedInstanceState.getStringArrayList(ExtraCommandHistory);
             } else {
 
                 Intent intent = getIntent();
@@ -133,9 +139,10 @@ public class ConnectionActivity extends BaseActivity {
                 } else{
                     Log.d(TAG,"rescued activity from intent");
                 }
-                preFilledCommandText = intent.getStringExtra(ExtraPreFilledCommandText);
-                preFilledCommandResultAreaText = intent.getStringExtra(ExtraPreFilledCommandResultAreaText);
+                getConnectionData(rconServer.getSid());
+
             }
+
             connectionToolbar=findViewById(R.id.connection_toolbar);
             connectionToolbar.setTitle(rconServer.getName());
             setSupportActionBar(connectionToolbar);
@@ -217,16 +224,33 @@ public class ConnectionActivity extends BaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
-
+        handler.removeCallbacks(keepAliveRunnable);
         if(rconConnect != null && !errorRaised) {
             int notifyCode = makeConnectionNotification();
             Log.d("Rcon Connection", "Frontend paused, hashcode: " + notifyCode);
+            rconConnect.disconnect();
+            storeConnectionData();
+        }
+
+        rconConnect = null;
+    }
+
+    private void storeConnectionData() {
+        // update database
+        int res= connectionsModel.updateBySid(rconServer.getSid(),
+                connectionCommandText.getText().toString(), connectionCommandArea.getText().toString(),
+                commandHistory.toArray(new String[0]));
+        if (res==0) { //if updating fails
+            // add new entry
+            connectionsModel.add(rconServer.getSid(),
+                    connectionCommandText.getText().toString(), connectionCommandArea.getText().toString(),
+                commandHistory.toArray(new String[0]));
         }
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
         RconServerConnectorAsyncTask rconServerConnectorAsyncTask = new RconServerConnectorAsyncTask(this);
         //rconServerConnectorAsyncTask.execute();
         rconServerConnectorAsyncTask.executeAsync();
@@ -270,7 +294,7 @@ public class ConnectionActivity extends BaseActivity {
                 return true;
 
             case R.id.connection_back:
-                MainActivity.startActivity(this);
+                finish();
                 return true;
 
             case R.id.connection_clean_command_history:
@@ -291,7 +315,6 @@ public class ConnectionActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        handler.removeCallbacks(keepAliveRunnable);
     }
 
     @Override
@@ -329,11 +352,16 @@ public class ConnectionActivity extends BaseActivity {
 
         Intent openActivityIntent = new Intent(this, ConnectionActivity.class);
         openActivityIntent.putExtra(ExtraRconServer, rconServer);
-        openActivityIntent.putExtra(ExtraPreFilledCommandText, connectionCommandText.getText().toString());
-        openActivityIntent.putExtra(ExtraPreFilledCommandResultAreaText, connectionCommandArea.getText().toString());
-        openActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+        //openActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+        openActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        // To start an activity that includes a back stack of activities:
+        // Create the TaskStackBuilder and add the intent, which inflates the back stack.
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addNextIntentWithParentStack(openActivityIntent);
 
-        PendingIntent openActivityPendingIntent = PendingIntent.getActivity(this, 0, openActivityIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        //PendingIntent openActivityPendingIntent = PendingIntent.getActivity(this, 0, openActivityIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        // ...and call stackBuilder.getPendingIntent instead of PendingIntent.getActivity
+        PendingIntent openActivityPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, ApplicationEnvironment.NotificationChannelID.RconConnection)
@@ -478,6 +506,7 @@ public class ConnectionActivity extends BaseActivity {
             if(rconConnect != null) {
                 rconConnect.disconnect();
                 rconConnect = null;
+                connectionsModel.deleteBySid(rconServer.getSid());
             }
         } catch (RuntimeException ex) {
             Log.i("Rcon Connection", "Stop connection failed: " + ex.getMessage());
@@ -518,13 +547,33 @@ public class ConnectionActivity extends BaseActivity {
         return quickCommands;
     }
 
+    private void getConnectionData(int sid){
+        try (Cursor connectionCursor = connectionsModel.getBySid(sid)) {
+            if (!connectionCursor.moveToFirst()) {
+                // Handle the case where no data is found
+                return;
+            }
+            int id=connectionCursor.getInt(connectionCursor.getColumnIndexOrThrow(ConnectionsModel.FieldServerID));
+            preFilledCommandText=connectionCursor.getString(connectionCursor.getColumnIndexOrThrow(ConnectionsModel.FieldPreFilledCommand));
+            preFilledCommandResultAreaText=connectionCursor.getString(connectionCursor.getColumnIndexOrThrow(ConnectionsModel.FieldResult));
+            String commandHistoryString=connectionCursor.getString(connectionCursor.getColumnIndexOrThrow(ConnectionsModel.FieldHistory));
+            commandHistory=connectionsModel.decodeToStringArray(commandHistoryString);
+
+        } catch (Exception ex) {
+            toast(getString(R.string.error_unable_load_connections) + ex.getLocalizedMessage());
+            ex.printStackTrace();
+        }
+    }
+
     public void makeBackConfirm() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
                 .setMessage(getString(R.string.prompt_confirm_disconnect))
                 .setNegativeButton(getString(R.string.action_exit), (dialog, which) -> exit())
-                .setOnCancelListener(dialog -> exit())
-                .setPositiveButton(getString(R.string.action_run_in_background), (dialog, which) -> MainActivity.startActivity(this));
+                //.setOnCancelListener(dialog -> exit())
+                .setPositiveButton(getString(R.string.action_run_in_background), (dialog, which) -> {
+                    finish();
+                });
 
         builder.show();
     }

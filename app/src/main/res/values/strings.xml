@@ -98,4 +98,5 @@
     <string name="permissionNotificationDialogMessage">Please allow notifications</string>
     <string name="btnText_NoThanks">No thanks</string>
     <string name="app_may_not_work_as_intended">App may not work as intended</string>
+    <string name="error_unable_load_connections">Unable to load connection data</string>
 </resources>

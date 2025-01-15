@@ -25,7 +25,11 @@
             android:name=".ui.connection.ConnectionActivity"
             android:windowSoftInputMode="adjustResize"
             android:label="@string/title_connection"
-            android:exported="true">
+            android:exported="true"
+            android:taskAffinity=""
+            android:excludeFromRecents="true"
+            android:parentActivityName=".ui.main.MainActivity"
+            >
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>

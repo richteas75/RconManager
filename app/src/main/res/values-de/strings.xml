@@ -95,4 +95,5 @@
     <string name="permissionNotificationDialogMessage">Bitte Benachrichtigungen aktivierem</string>
     <string name="btnText_NoThanks">Nein danke</string>
     <string name="app_may_not_work_as_intended">App könnte nicht wie gedacht funktionieren</string>
+    <string name="error_unable_load_connections">Konnte Verbindungs-Info nicht kaden</string>
 </resources>

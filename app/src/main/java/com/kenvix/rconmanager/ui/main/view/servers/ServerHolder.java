@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.kenvix.rconmanager.R;
+import com.kenvix.rconmanager.database.dao.ConnectionsModel;
 import com.kenvix.rconmanager.database.dao.ServerModel;
 import com.kenvix.rconmanager.rcon.meta.RconServer;
 import com.kenvix.rconmanager.ui.addserver.AddServerActivity;
@@ -51,12 +52,14 @@ public class ServerHolder extends BaseHolder<RconServer> implements View.OnCreat
         MainActivity activity = (MainActivity) getActivityByView(v);
         activity.getMenuInflater().inflate(R.menu.menu_server_item, menu);
         ServerModel serverModel = new ServerModel(activity);
+        ConnectionsModel connectionsModel = new ConnectionsModel(activity);
 
         menu.findItem(R.id.action_server_item_delete).setOnMenuItemClickListener(view -> {
             activity.confirmDialog(activity.getString(R.string.confirm_server_delete, rconServer.getName()), result -> {
                 if(result) {
                     try {
                         serverModel.deleteBySid(rconServer.getSid());
+                        connectionsModel.deleteBySid(rconServer.getSid());
                         activity.snackbar(activity.getString(R.string.prompt_deleted, rconServer.getName()));
                         activity.reloadServerRecyclerView();
                     } catch (Exception ex) {
