@@ -75,6 +75,8 @@ public class ConnectionActivity extends BaseActivity {
     private Handler handler;
     private ConnectionActivity connectionActivity;
 
+    private ConnectionsModel connectionsModel;
+
     private static final String TAG =ConnectionActivity.class.getName();
 
     @ViewAutoLoad public Button connectionCommandPrev;
@@ -258,8 +260,6 @@ public class ConnectionActivity extends BaseActivity {
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.connection_clean_command_area:
-                connectionCommandArea.setText("");
             case R.id.connection_clean_command_result_area:
                 preFilledCommandResultAreaText=getString(R.string.command_result_area);
                 connectionCommandArea.setText(preFilledCommandResultAreaText);
